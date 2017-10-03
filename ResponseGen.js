@@ -37,7 +37,14 @@ class ResponseGen {
                     .up()
                 }
 
-        return xml.end({pretty : true});;
+        return xml.end({pretty : true});
+    }
+
+    static EmptyResponse() {
+        var xml = xmlbuilder.create("result")
+            .e("has_error", "0").up()
+            .e("version", "1").up()
+        return xml.end({pretty : true});
     }
 }
 

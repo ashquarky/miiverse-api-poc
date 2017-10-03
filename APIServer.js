@@ -26,6 +26,7 @@ class APIServer {
     setupRequests() {
         app.all("*", this.request);
         app.get(`/${consts.API_VERSION}/communities/*`, this.communityRequest.bind(this));
+        app.post(`/${consts.API_VERSION}/posts/*/empathies`, this.empathyRequest.bind(this));
     }
 
     request(req, res, next) {
@@ -49,7 +50,14 @@ class APIServer {
         var posts = DataStorage.getDataStorage().getPostsByCommunity(community.id, req.query.limit);
         //console.log(posts);
         var response = ResponseGen.PostsResponse(posts, community);
-        res.send(response)
+        res.send(response);
+    }
+
+    empathyRequest(req, res, next) {
+        var postID = req.params[0];
+        DataStorage.getDataStorage().empathyPostByID(postID);
+        var response = ResponseGen.EmptyResponse();
+        res.send(response);
     }
 
     decodeParamPack(paramPack) {

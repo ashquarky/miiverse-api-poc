@@ -59,6 +59,10 @@ class DataStorageDummy {
 
         return posts;
     }
+
+    static empathyPostByID(id) {
+        console.log("Empathied post", id);
+    }
 }
 
 if (typeof module !== "undefined") {
