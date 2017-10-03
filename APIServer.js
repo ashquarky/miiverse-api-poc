@@ -48,7 +48,7 @@ class APIServer {
         }
 
         var posts = DataStorage.getDataStorage().getPostsByCommunity(community.id, req.query.limit);
-        //console.log(posts);
+
         var response = ResponseGen.PostsResponse(posts, community);
         res.send(response);
     }
@@ -56,6 +56,7 @@ class APIServer {
     empathyRequest(req, res, next) {
         var postID = req.params[0];
         DataStorage.getDataStorage().empathyPostByID(postID);
+        
         var response = ResponseGen.EmptyResponse();
         res.send(response);
     }
