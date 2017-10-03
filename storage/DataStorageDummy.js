@@ -1,4 +1,3 @@
-const DataStorage = require("./DataStorage.js");
 const moment = require("moment-timezone");
 
 class DataStorageDummy {
