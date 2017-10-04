@@ -4,7 +4,7 @@ const moment = require("moment-timezone");
 class ResponseGen {
 /*  TODO lots of stubs and constants in here */
     static PostsResponse(posts, community) {
-        var xml = xmlbuilder.create("result")
+        const xml = xmlbuilder.create("result")
             .e("has_error", "0").up()
             .e("version", "1").up()
             .e("request_name", "posts").up()
@@ -12,9 +12,9 @@ class ResponseGen {
                 .e("community_id", community.id).up()
             .up()
             .e("posts");
-                for (var i = 0; i < posts.length; i++) {
+                for (let i = 0; i < posts.length; i++) {
                     xml.e("post")
-                        .e("app_data", posts[i].app_data).up()
+                        .e("app_data", posts[i].appData).up()
                         .e("body", posts[i].body).up()
                         .e("community_id", community.id).up()
                         .e("country_id", "254").up()
@@ -32,19 +32,19 @@ class ResponseGen {
                         .e("platform_id", "1").up()
                         .e("region_id", "4").up()
                         .e("reply_count", "0").up()
-                        .e("screen_name", posts[i].screen_name).up()
+                        .e("screen_name", posts[i].screenName).up()
                         .e("title_id", community.tids[0]).up()
-                    .up()
+                    .up();
                 }
 
-        return xml.end({pretty : true});
+        return xml.end({ pretty: true });
     }
 
     static EmptyResponse() {
-        var xml = xmlbuilder.create("result")
+        const xml = xmlbuilder.create("result")
             .e("has_error", "0").up()
-            .e("version", "1").up()
-        return xml.end({pretty : true});
+            .e("version", "1").up();
+        return xml.end({ pretty: true });
     }
 }
 

@@ -1,59 +1,56 @@
 const moment = require("moment-timezone");
 
+const RANDOM_TID = 0x0005000042454546;
+const POST_NUM = 30;
+
 class DataStorageDummy {
-    constructor() {
-
-    }
-
     static getCommunityByTitleID(tid) {
-        var community = {
-            id : 1,
-            name : "Dummy Community",
-            empathy : 1337,
-            tids : [ tid ],
-        }
+        const community = {
+            id: 1,
+            name: "Dummy Community",
+            empathy: 1337,
+            tids: [ tid ],
+        };
         return community;
     }
 
     static getCommunityByID(id) {
-        var community;
-        if (id == 0) {
+        let community = null;
+        if (id === 0) {
             community = {
-                id : 0,
-                name : "Global Community",
-                empathy : 0,
-                tids : [ 0 ],
-            }
+                id: 0,
+                name: "Global Community",
+                empathy: 0,
+                tids: [ 0 ],
+            };
         } else {
             community = {
-                id : id,
-                name : "Dummy Community",
-                empathy : 1337,
-                tids : [ 0x0005000042454546 ],
+                id,
+                name: "Dummy Community",
+                empathy: 1337,
+                tids: [ RANDOM_TID ],
             };
         }
         return community;
     }
 
     static getPostsByCommunity(id, limit) {
-        var max_post_num = 20; //TODO
-        if (max_post_num >= limit) {
-            max_post_num = limit - 1;
-        }
-        var posts = [];
-        for (var i = 0; i < max_post_num; i++) {
+        const postNum = (POST_NUM >= limit) ? limit - 2 : POST_NUM - 1;
+        console.log(postNum);
+        const posts = [];
+        for (let i = 0; i < postNum; i++) {
             posts.push({
-                    id : i,
-                    pid : i,
-                    community_id : id,
-                    created : moment().subtract(i, "days").tz("GMT").format(),
+                    id: `.${i}`,
+                    pid: i,
+                    communityID: id,
+                    created: moment().subtract(i, "seconds").tz("GMT").format(),
 
-                    body : "Hello World!" + i,
-                    empathy : 1337,
-                    screen_name : "steve" + i,
+                    body: `Test post ${i}`,
+                    empathy: 1337,
+                    screenName: `User ${i}`,
 
                     //Splatoon application data
-                    app_data : "AwAAAP////8BAABBAHMAaAAAAD8APwA/AD8AAAAAAAAAAAAAAAAAAAAAAAAAAABBQQMAAP////8AAAAAAAAAAQAAAAIAAA+rAAABLwAAAAYAAAABAAAtOAAAB9gAAAACAAAAAgAAAAwAAAAKAAAACAAAAAAAAAu7AAAAAgAAAAIAAAAGAAAAAgAAAAAAAAAAAAAAAQAAAAIAAAACAAAAAAAAAAMAAAAKAAAAAAAAAAAAAAAIAAAAAP//////////AAAAAP8AAAD////9/////wAAAABpL8sJAAAAAAAAAAA/EZGSPzCwsT1AwMA/gAAAAAAA7NLIlEs=",
+                    appData: "AwAAAP////8BAABBAHMAaAAAAD8APwA/AD8AAAAAAAAAAAAAAAAAAAAAAAAAAABBQQMAAP////8AAAAAAAAAAQAAAAIAAA+rAAABLwAAAAYAAAABAAAtOAAAB9gAAAACAAAAAgAAAAwAAAAKAAAACAAAAAAAAAu7AAAAAgAAAAIAAAAGAAAAAgAAAAAAAAAAAAAAAQAAAAIAAAACAAAAAAAAAAMAAAAKAAAAAAAAAAAAAAAIAAAAAP//////////AAAAAP8AAAD////9/////wAAAABpL8sJAAAAAAAAAAA/EZGSPzCwsT1AwMA/gAAAAAAA7NLIlEs=",
                 });
         }
 
