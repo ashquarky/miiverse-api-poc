@@ -2,12 +2,14 @@
 
 const https = require("https");
 const express = require("express");
+const multer = require("multer");
 const fs = require("fs");
 const consts = require("./consts.js");
 const DataStorage = require("./storage/DataStorage.js");
 const ResponseGen = require("./ResponseGen.js")
 
 var app = express();
+var mult = multer();
 
 class APIServer {
     constructor() {
@@ -27,6 +29,7 @@ class APIServer {
         app.all("*", this.request);
         app.get(`/${consts.API_VERSION}/communities/*`, this.communityRequest.bind(this));
         app.post(`/${consts.API_VERSION}/posts/*/empathies`, this.empathyRequest.bind(this));
+        app.post(`/${consts.API_VERSION}/posts`, mult.array(), this.postRequest.bind(this));
     }
 
     request(req, res, next) {
@@ -50,15 +53,20 @@ class APIServer {
         var posts = DataStorage.getDataStorage().getPostsByCommunity(community.id, req.query.limit);
 
         var response = ResponseGen.PostsResponse(posts, community);
+        console.log(response);
         res.send(response);
     }
 
     empathyRequest(req, res, next) {
         var postID = req.params[0];
         DataStorage.getDataStorage().empathyPostByID(postID);
-        
+
         var response = ResponseGen.EmptyResponse();
         res.send(response);
+    }
+
+    postRequest(req, res, next) {
+        console.log(req.body);
     }
 
     decodeParamPack(paramPack) {
