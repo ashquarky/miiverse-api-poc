@@ -4,10 +4,12 @@ const https = require("https");
 const express = require("express");
 const multer = require("multer");
 const fs = require("fs");
+const moment = require("moment-timezone");
 const consts = require("./consts.js");
-const DataStorage = require("./storage/DataStorage.js");
-const ResponseGen = require("./ResponseGen.js");
 const Log = require("./Log.js");
+const DataStorage = require("./storage/DataStorage.js");
+const IncomingPost = require("./storage/IncomingPost.js");
+const ResponseGen = require("./ResponseGen.js");
 
 const app = express();
 const mult = multer();
@@ -64,6 +66,37 @@ class APIServer {
     //TODO posting support
     postRequest(req, res) {
         Log.debug(req.body);
+        Log.debug(req.body.painting);
+
+        const communityID = parseInt(req.body.community_id, 10);
+        const paramPack = this.decodeParamPack(req.headers["x-nintendo-parampack"]);
+
+        let community = null;
+        if (communityID === 0) {
+            community = DataStorage.getDataStorage().getCommunityByTitleID(paramPack.title_id);
+        } else {
+            community = DataStorage.getDataStorage().getCommunityByID(communityID);
+        }
+
+        const appData = req.body.app_data.replace(/\0/g, "").trim();
+        const painting = req.body.painting.replace(/\0/g, "").trim();
+
+        let post = new IncomingPost({
+            communityID: community.id,
+            created: moment().tz("GMT").format(),
+            body: req.body.body,
+            painting,
+        /*  We need auth for this. Might be worth making it DataStorage's problem. */
+            screenName: "HTTP501",
+            appData,
+            tid: community.tids[0],
+        });
+
+        //TODO should be async
+        post = DataStorage.getDataStorage().makePost(post);
+
+        const response = ResponseGen.SinglePostResponse(post);
+        res.send(response);
     }
 
     //TODO this code is a mess

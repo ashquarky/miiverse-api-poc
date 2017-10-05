@@ -3,12 +3,14 @@ const consts = require("../consts.js");
 const Log = require("../Log.js");
 
 class Post {
-    constructor({ id, pid, communityID, created, body, empathy, screenName, appData }) {
+    constructor({ id, pid, tid, communityID, created, body, painting, empathy, screenName, appData }) {
         this.id = id;
         this.pid = pid;
+        this.tid = tid;
         this.communityID = communityID;
         this.created = created;
         this.body = body;
+        this.painting = painting;
         this.empathy = empathy;
         this.screenName = screenName;
         this.appData = appData;
@@ -41,10 +43,18 @@ class Post {
             Log.warn("Undeclared screenName when constructing Post object!");
             this.screenName = consts.BAD_SCREEN_NAME;
         }
+        if (!this.tid) {
+            Log.warn("Undeclared TitleID when constructing Post object!");
+            this.tid = consts.BAD_TITLE_ID;
+        }
 
         if (!this.body && !this.painting) {
             Log.warn("Post has no content!");
             this.body = consts.BAD_POST_TEXT;
+        }
+
+        if (this.painting) {
+            this.painting_sz = Buffer.from(this.painting, "base64").length;
         }
     }
 }
