@@ -54,7 +54,7 @@ class Post {
         }
 
         if (this.painting) {
-            this.painting_sz = Buffer.from(this.painting, "base64").length;
+            this.paintingSz = Buffer.from(this.painting, "base64").length;
         }
     }
 }

@@ -62,9 +62,6 @@ class APIServer {
     }
 
     postRequest(req, res) {
-        Log.debug(req.body);
-        Log.debug(req.body.painting);
-
         const communityID = parseInt(req.body.community_id, 10);
         const paramPack = this.decodeParamPack(req.headers["x-nintendo-parampack"]);
 

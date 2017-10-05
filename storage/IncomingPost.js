@@ -1,6 +1,6 @@
 const moment = require("moment-timezone");
 const Log = require("../Log.js");
-const consts = require("../consts.js")
+const consts = require("../consts.js");
 
 class IncomingPost {
     constructor({ tid, communityID, created, body, painting, screenName, appData }) {

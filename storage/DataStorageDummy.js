@@ -98,7 +98,7 @@ class DataStorageDummy {
             empathy: 0,
             screenName: post.screenName,
 
-            appData: post.appData
+            appData: post.appData,
         });
     }
 }

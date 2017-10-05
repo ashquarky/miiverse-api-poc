@@ -32,7 +32,7 @@ class ResponseGen {
                             xml = xml.e("painting")
                                 .e("format", "tga").up()
                                 .e("content", posts[i].painting).up()
-                                .e("size", posts[i].painting_sz).up()
+                                .e("size", posts[i].paintingSz).up()
                                 .e("url", "https://s3.amazonaws.com/olv-public/pap/WVW69koebmETvBVqm1").up()
                             .up();
                         }
@@ -62,7 +62,7 @@ class ResponseGen {
             .e("version", "1").up()
             .e("post");
                 if (post.appData) {
-                    xml = xml.e("app_data", post.appData).up()
+                    xml = xml.e("app_data", post.appData).up();
                 }
                 xml = xml.e("body", post.body).up()
                 .e("community_id", post.communityID).up()
@@ -81,7 +81,7 @@ class ResponseGen {
                     xml = xml.e("painting")
                         .e("format", "tga").up()
                         .e("content", post.painting).up()
-                        .e("size", post.painting_sz).up()
+                        .e("size", post.paintingSz).up()
                         .e("url", "https://s3.amazonaws.com/olv-public/pap/WVW69koebmETvBVqm1").up()
                     .up();
                 }
