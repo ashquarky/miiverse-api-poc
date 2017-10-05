@@ -1,4 +1,5 @@
 const moment = require("moment-timezone");
+const Post = require("./Post.js");
 const Log = require("../Log.js");
 
 const RANDOM_TID = 0x0005000042454546;
@@ -40,8 +41,9 @@ class DataStorageDummy {
         Log.debug(`Generating ${postNum} posts...`);
         const posts = [];
         for (let i = 0; i < postNum; i++) {
-            posts.push({
-                    id: `.${i}`,
+            posts.push(
+                new Post({
+                    id: i,
                     pid: i,
                     communityID: id,
                     created: moment().subtract(i, "seconds").tz("GMT").format(),
@@ -52,7 +54,8 @@ class DataStorageDummy {
 
                     //Splatoon application data
                     appData: "AwAAAP////8BAABBAHMAaAAAAD8APwA/AD8AAAAAAAAAAAAAAAAAAAAAAAAAAABBQQMAAP////8AAAAAAAAAAQAAAAIAAA+rAAABLwAAAAYAAAABAAAtOAAAB9gAAAACAAAAAgAAAAwAAAAKAAAACAAAAAAAAAu7AAAAAgAAAAIAAAAGAAAAAgAAAAAAAAAAAAAAAQAAAAIAAAACAAAAAAAAAAMAAAAKAAAAAAAAAAAAAAAIAAAAAP//////////AAAAAP8AAAD////9/////wAAAABpL8sJAAAAAAAAAAA/EZGSPzCwsT1AwMA/gAAAAAAA7NLIlEs=",
-                });
+                })
+            );
         }
 
         return posts;
