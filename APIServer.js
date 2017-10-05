@@ -46,7 +46,7 @@ class APIServer {
             community = DataStorage.getDataStorage().getCommunityByID(communityID);
         }
 
-        const posts = DataStorage.getDataStorage().getPostsByCommunity(community.id, req.query.limit);
+        const posts = DataStorage.getDataStorage().getPostsByCommunity(community, req.query.limit);
 
         const response = ResponseGen.PostsResponse(posts, community);
         //console.log(response);

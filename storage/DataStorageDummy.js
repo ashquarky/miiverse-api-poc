@@ -36,7 +36,7 @@ class DataStorageDummy {
         return community;
     }
 
-    static getPostsByCommunity(id, limit) {
+    static getPostsByCommunity(community, limit) {
         const postNum = (POST_NUM > limit) ? limit : POST_NUM;
         Log.debug(`Generating ${postNum} posts...`);
         const posts = [];
@@ -45,8 +45,8 @@ class DataStorageDummy {
                 new Post({
                     id: i,
                     pid: i,
-                    communityID: id,
                     created: moment().subtract(i, "seconds").tz("GMT").format(),
+                        communityID: community.id,
 
                     body: `Test post ${i}`,
                     empathy: 1337,
