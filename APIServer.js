@@ -35,7 +35,7 @@ class APIServer {
     }
 
     communityRequest(req, res) {
-        const communityID = parseInt(req.params[0].split('/')[0]);
+        const communityID = parseInt(req.params[0].split('/')[0], 10);
         const paramPack = this.decodeParamPack(req.headers["x-nintendo-parampack"]);
 
         let community = null;
@@ -61,6 +61,7 @@ class APIServer {
         res.send(response);
     }
 
+    //TODO posting support
     postRequest(req, res) {
         Log.debug(req.body);
     }
