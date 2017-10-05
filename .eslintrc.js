@@ -7,7 +7,7 @@ module.exports = {
     "rules": {
         "quotes": [0, "double"],
         "indent": 0,
-        "no-console": 0,
+        "id-blacklist": 0,
         "template-curly-spacing": [2, "never"],
         "newline-per-chained-call": 0,
         "filenames/match-regex": 0,

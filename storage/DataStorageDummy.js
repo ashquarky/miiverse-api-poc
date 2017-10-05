@@ -1,4 +1,5 @@
 const moment = require("moment-timezone");
+const Log = require("../Log.js");
 
 const RANDOM_TID = 0x0005000042454546;
 const POST_NUM = 30;
@@ -36,7 +37,7 @@ class DataStorageDummy {
 
     static getPostsByCommunity(id, limit) {
         const postNum = (POST_NUM >= limit) ? limit - 2 : POST_NUM - 1;
-        console.log(postNum);
+        Log.debug(`Generating ${postNum} posts...`);
         const posts = [];
         for (let i = 0; i < postNum; i++) {
             posts.push({
@@ -58,7 +59,7 @@ class DataStorageDummy {
     }
 
     static empathyPostByID(id) {
-        console.log("Empathied post", id);
+        Log.debug("Empathied post", id);
     }
 }
 

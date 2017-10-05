@@ -7,15 +7,12 @@ const fs = require("fs");
 const consts = require("./consts.js");
 const DataStorage = require("./storage/DataStorage.js");
 const ResponseGen = require("./ResponseGen.js");
+const Log = require("./Log.js");
 
 const app = express();
 const mult = multer();
 
 class APIServer {
-    constructor() {
-        console.log("mmph");
-    }
-
     listen() {
         https.createServer({
             key: fs.readFileSync("certs/tmp-key.pem"),
@@ -33,8 +30,7 @@ class APIServer {
     }
 
     request(req, res, next) {
-        console.log(`Request! https://${req.headers.host}${req.url}`);
-
+        Log.debug(`Incoming request for ${req.url}`);
         next();
     }
 
@@ -66,7 +62,7 @@ class APIServer {
     }
 
     postRequest(req, res) {
-        console.log(req.body);
+        Log.debug(req.body);
     }
 
     //TODO this code is a mess
