@@ -44,14 +44,12 @@ class APIServer {
         if (communityID === 0) {
             community = DataStorage.getDataStorage().getCommunityByTitleID(paramPack.title_id);
         } else {
-            //community = DataStorage.getDataStorage().getCommunityByTitleID();
             community = DataStorage.getDataStorage().getCommunityByID(communityID);
         }
 
         const posts = DataStorage.getDataStorage().getPostsByCommunity(community, req.query.limit);
 
         const response = ResponseGen.PostsResponse(posts, community);
-        //console.log(response);
         res.send(response);
     }
 
@@ -63,7 +61,6 @@ class APIServer {
         res.send(response);
     }
 
-    //TODO posting support
     postRequest(req, res) {
         Log.debug(req.body);
         Log.debug(req.body.painting);

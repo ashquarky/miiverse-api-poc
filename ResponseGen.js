@@ -2,8 +2,7 @@ const xmlbuilder = require("xmlbuilder");
 const moment = require("moment-timezone");
 
 class ResponseGen {
-/*  TODO lots of stubs and constants in here
-    Needs painting support */
+/*  TODO lots of stubs and constants in here */
     static PostsResponse(posts, community) {
         let xml = xmlbuilder.create("result")
             .e("has_error", "0").up()
