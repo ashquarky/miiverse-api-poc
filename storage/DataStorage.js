@@ -1,4 +1,4 @@
-const consts = require("../consts.js");
+const consts = require("../utils/consts.js");
 const DataStorageDummy = require("./DataStorageDummy.js");
 
 class DataStorage {

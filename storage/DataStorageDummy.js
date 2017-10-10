@@ -1,7 +1,7 @@
 const moment = require("moment-timezone");
 const Post = require("./Post.js");
-const Log = require("../Log.js");
-const consts = require("../consts.js");
+const Log = require("../utils/Log.js");
+const consts = require("../utils/consts.js");
 
 const POST_NUM = 30;
 

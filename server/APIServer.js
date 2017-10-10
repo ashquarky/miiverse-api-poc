@@ -5,10 +5,10 @@ const express = require("express");
 const multer = require("multer");
 const fs = require("fs");
 const moment = require("moment-timezone");
-const consts = require("./consts.js");
-const Log = require("./Log.js");
-const DataStorage = require("./storage/DataStorage.js");
-const IncomingPost = require("./storage/IncomingPost.js");
+const consts = require("../utils/consts.js");
+const Log = require("../utils/Log.js");
+const DataStorage = require("../storage/DataStorage.js");
+const IncomingPost = require("../storage/IncomingPost.js");
 const ResponseGen = require("./ResponseGen.js");
 
 const app = express();
