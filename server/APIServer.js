@@ -25,7 +25,7 @@ class APIServer {
     }
 
     setupRequests() {
-        app.all("*", this.request);
+        app.all("*", this.request.bind(this));
         app.get(`/${consts.API_VERSION}/communities/*`, this.communityRequest.bind(this));
         app.post(`/${consts.API_VERSION}/posts/*/empathies`, this.empathyRequest.bind(this));
         app.post(`/${consts.API_VERSION}/posts`, mult.array(), this.postRequest.bind(this));
