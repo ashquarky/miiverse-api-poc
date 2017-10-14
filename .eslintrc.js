@@ -4,6 +4,9 @@ module.exports = {
         "node": true
     },
     "extends": "strict",
+    "parserOptions": {
+        "ecmaVersion": 8,
+    },
     "rules": {
         "quotes": [0, "double"],
         "indent": 0,
@@ -19,6 +22,8 @@ module.exports = {
         "prefer-destructuring": 0,
         //this one might be better turned on
         "no-sync": 0,
+        "require-await": 0,
+        "array-element-newline": 0,
 
         "no-magic-numbers": [1, {"ignore": [-1, 0, 1, 2, 4]}],
         "no-warning-comments": 1,

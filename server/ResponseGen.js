@@ -3,7 +3,7 @@ const moment = require("moment-timezone");
 
 class ResponseGen {
 /*  TODO lots of stubs and constants in here */
-    static PostsResponse(posts, community) {
+    static async PostsResponse(posts, community) {
         let xml = xmlbuilder.create("result")
             .e("has_error", "0").up()
             .e("version", "1").up()
@@ -48,7 +48,7 @@ class ResponseGen {
         return xml.end({ pretty: true, allowEmpty: true });
     }
 
-    static EmptyResponse() {
+    static async EmptyResponse() {
         const xml = xmlbuilder.create("result")
             .e("has_error", "0").up()
             .e("version", "1").up();
@@ -56,7 +56,7 @@ class ResponseGen {
     }
 
 /*  TODO Again, some constants */
-    static SinglePostResponse(post) {
+    static async SinglePostResponse(post) {
         let xml = xmlbuilder.create("result")
             .e("has_error", "0").up()
             .e("version", "1").up()

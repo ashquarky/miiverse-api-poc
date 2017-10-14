@@ -6,7 +6,7 @@ const consts = require("../utils/consts.js");
 const POST_NUM = 30;
 
 class DataStorageDummy {
-    static getCommunityByTitleID(tid) {
+    static async getCommunityByTitleID(tid) {
         const community = {
             id: 1,
             name: "Dummy Community",
@@ -16,7 +16,7 @@ class DataStorageDummy {
         return community;
     }
 
-    static getCommunityByID(id) {
+    static async getCommunityByID(id) {
         let community = null;
         if (id === 0) {
             community = {
@@ -36,7 +36,7 @@ class DataStorageDummy {
         return community;
     }
 
-    static getPostsByCommunity(community, limit) {
+    static async getPostsByCommunity(community, limit) {
         const postNum = (POST_NUM > limit) ? limit : POST_NUM;
         Log.debug(`Generating ${postNum} posts...`);
         const posts = [];
@@ -81,11 +81,11 @@ class DataStorageDummy {
         return posts;
     }
 
-    static empathyPostByID(id) {
+    static async empathyPostByID(id) {
         Log.debug("Empathied post", id);
     }
 
-    static makePost(post) {
+    static async makePost(post) {
         return new Post({
             id: 0,
             pid: 0,
