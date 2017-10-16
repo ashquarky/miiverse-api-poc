@@ -3,7 +3,7 @@ if (typeof module !== "undefined") {
         DUMMY: 0,
     };
 
-    exports.VERSION = "alpha";
+    exports.VERSION = "0.0.1";
     exports.API_VERSION = "v1";
     exports.API_PORT = 5000;
     exports.STORAGETYPE = exports.ENUM_STORAGETYPE.DUMMY;
