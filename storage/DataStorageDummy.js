@@ -3,7 +3,7 @@ const Post = require("./Post.js");
 const Log = require("../utils/Log.js");
 const consts = require("../utils/consts.js");
 
-const POST_NUM = 30;
+const POST_NUM = 200;
 
 class DataStorageDummy {
     static async getCommunityByTitleID(tid) {
