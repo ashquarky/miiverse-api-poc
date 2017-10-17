@@ -1,6 +1,7 @@
 //loosely based on https://github.com/ProjectFii/3DFii/blob/master/API.js
 
 const https = require("https");
+const http = require("http");
 const express = require("express");
 const wrap = require("async-middleware").wrap;
 const multer = require("multer");
@@ -17,12 +18,14 @@ const mult = multer();
 
 class APIServer {
     listen() {
-        https.createServer({
-            key: fs.readFileSync("certs/tmp-key.pem"),
-            cert: fs.readFileSync("certs/tmp-cert.pem"),
-        }, app).listen(consts.API_PORT);
-
-        Log.debug("Server created");
+        if (consts.USE_SSL) {
+            https.createServer({
+                key: fs.readFileSync("certs/tmp-key.pem"),
+                cert: fs.readFileSync("certs/tmp-cert.pem"),
+            }, app).listen(consts.API_PORT);
+        } else {
+            http.createServer(app).listen(consts.API_PORT);
+        }
 
         this.setupRequests();
     }
