@@ -4,6 +4,9 @@
   "scripts": {
     "start": "node main.js"
   },
+  "engines": {
+      "node": "^8.7.0"
+  },
   "description": "",
   "main": "main.js",
   "dependencies": {
