@@ -5,7 +5,7 @@ if (typeof module !== "undefined") {
 
     exports.VERSION = "0.0.1";
     exports.API_VERSION = "v1";
-    exports.API_PORT = 5000;
+    exports.API_PORT = process.env.PORT | 5000;
     exports.STORAGETYPE = exports.ENUM_STORAGETYPE.DUMMY;
 
     exports.BAD_POST_ID = "BAD_POST";
