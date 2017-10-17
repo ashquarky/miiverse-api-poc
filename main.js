@@ -6,3 +6,5 @@ Log.info(`Welcome to a thing (${consts.VERSION})`);
 
 const api = new APIServer();
 api.listen();
+
+Log.info(`Now listening on port ${consts.API_PORT}`)

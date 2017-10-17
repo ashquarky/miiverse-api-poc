@@ -22,6 +22,8 @@ class APIServer {
             cert: fs.readFileSync("certs/tmp-cert.pem"),
         }, app).listen(consts.API_PORT);
 
+        Log.debug("Server created");
+
         this.setupRequests();
     }
 
