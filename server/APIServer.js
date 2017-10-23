@@ -12,6 +12,7 @@ const Log = require("../utils/Log.js");
 const DataStorage = require("../storage/DataStorage.js");
 const IncomingPost = require("../storage/IncomingPost.js");
 const ResponseGen = require("./ResponseGen.js");
+const NNIDAuth = require("./NNIDAuth.js");
 
 const app = express();
 const mult = multer();
@@ -75,6 +76,7 @@ class APIServer {
     async postRequest(req, res) {
         const communityID = parseInt(req.body.community_id, 10);
         const paramPack = this.decodeParamPack(req.headers["x-nintendo-parampack"]);
+        const accountPromise = NNIDAuth.getAccountByToken(req.headers["x-nintendo-servicetoken"]);
 
         let community = null;
         if (communityID === 0) {
@@ -91,10 +93,10 @@ class APIServer {
             created: moment().tz("GMT").format(),
             body: req.body.body,
             painting,
-        /*  We need auth for this. Might be worth making it DataStorage's problem. */
-            screenName: "HTTP501",
             appData,
             tid: community.tids[0],
+
+            screenName: consts.BAD_SCREEN_NAME,
         });
 
         post = await DataStorage.getDataStorage().makePost(post);
@@ -102,6 +104,11 @@ class APIServer {
         const response = await ResponseGen.SinglePostResponse(post);
         res.contentType("application/xml");
         res.send(response);
+
+        const account = await accountPromise;
+        post.screenName = account.screenName;
+        DataStorage.getDataStorage().submitPost(post);
+        Log.debug(`${post.screenName}`);
     }
 
     //TODO this code is a mess

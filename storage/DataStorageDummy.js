@@ -101,6 +101,10 @@ class DataStorageDummy {
             appData: post.appData,
         });
     }
+
+    static async submitPost(post) {
+        Log.debug("Submitted post", post.id);
+    }
 }
 
 if (typeof module !== "undefined") {
