@@ -36,12 +36,31 @@ class APIServer {
         app.get(`/${consts.API_VERSION}/communities/*`, wrap(this.communityRequest.bind(this)));
         app.post(`/${consts.API_VERSION}/posts/*/empathies`, wrap(this.empathyRequest.bind(this)));
         app.post(`/${consts.API_VERSION}/posts`, mult.array(), wrap(this.postRequest.bind(this)));
+        app.all("/", wrap(this.rootRequest.bind(this)));
     }
 
 /*  Log *ALL* requests. Probably should change this to a different loglevel. */
     async request(req, res, next) {
         Log.debug(`Incoming request for ${req.url}`);
         next();
+    }
+
+/*  Show a bit of a message for the poor sods who try and load the endpoint in
+    a web browser. */
+    async rootRequest(req, res) {
+        res.contentType("text/plain");
+        res.status(418);
+        res.send(
+            "Hi! This is an API endpoint; so there's nothing here for your " +
+            "browser. You should try pointing your Wii U here instead." +
+            "\n\n" +
+            "If you're self-hosting, just set up your HOSTS file. If you're " +
+            "using an online endpoint, you should replace " +
+            "discovery.olv.nintendo.net to help deal with SSL and the Host " +
+            "header." +
+            "\n\n" +
+            "Have fun!"
+        );
     }
 
 /*  I wish this function could be optimised more... */
