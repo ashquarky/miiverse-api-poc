@@ -5,7 +5,7 @@ class NNIDAuth {
         const stubAcct = {
             id: 0,
             screenName: "HTTP501",
-        }
+        };
         return stubAcct;
     }
 }
