@@ -38,15 +38,19 @@ class APIServer {
         app.post(`/${consts.API_VERSION}/posts`, mult.array(), wrap(this.postRequest.bind(this)));
     }
 
+/*  Log *ALL* requests. Probably should change this to a different loglevel. */
     async request(req, res, next) {
         Log.debug(`Incoming request for ${req.url}`);
         next();
     }
 
+/*  I wish this function could be optimised more... */
     async communityRequest(req, res) {
+    /*  Parse out parameters from URL and headers */
         const communityID = parseInt(req.params[0].split('/')[0], 10);
         const paramPack = this.decodeParamPack(req.headers["x-nintendo-parampack"]);
 
+    /*  Get community details. communityID is usually 0, for some reason. */
         let community = null;
         if (communityID === 0) {
             community = await DataStorage.getDataStorage().getCommunityByTitleID(paramPack.title_id);
@@ -54,14 +58,17 @@ class APIServer {
             community = await DataStorage.getDataStorage().getCommunityByID(communityID);
         }
 
+    /*  Go to the database for posts. */
         const posts = await DataStorage.getDataStorage().getPostsByCommunity(community, req.query.limit);
 
+    /*  Build formatted response and send it off. */
         const response = await ResponseGen.PostsResponse(posts, community);
         res.contentType("application/xml");
         res.send(response);
     }
 
     async empathyRequest(req, res) {
+    /*  Extract post ID from URL (thanks Express!) */
         const postID = req.params[0];
 
         const [ response ] = await Promise.all([
@@ -74,10 +81,14 @@ class APIServer {
     }
 
     async postRequest(req, res) {
+    /*  Decode some parameters from the POST data and headers */
         const communityID = parseInt(req.body.community_id, 10);
         const paramPack = this.decodeParamPack(req.headers["x-nintendo-parampack"]);
+    /*  Send off tokens to the auth server. It's a promise, so this will happen
+        asynchronously. */
         const accountPromise = NNIDAuth.getAccountByToken(req.headers["x-nintendo-servicetoken"]);
 
+    /*  Get community details. Generally, communityID will be 0. */
         let community = null;
         if (communityID === 0) {
             community = await DataStorage.getDataStorage().getCommunityByTitleID(paramPack.title_id);
@@ -85,9 +96,12 @@ class APIServer {
             community = await DataStorage.getDataStorage().getCommunityByID(communityID);
         }
 
+    /*  Santize base64 strings. */
         const appData = req.body.app_data.replace(/\0/g, "").trim();
         const painting = req.body.painting.replace(/\0/g, "").trim();
 
+    /*  Build an IncomingPost object with all the information we've gathered.
+        screenName will be fixed up once we check on the promise. */
         let post = new IncomingPost({
             communityID: community.id,
             created: moment().tz("GMT").format(),
@@ -99,13 +113,22 @@ class APIServer {
             screenName: consts.BAD_SCREEN_NAME,
         });
 
+    /*  Pass it off to DataStorage so that all the IDs and whatever will be
+        assigned. Will return a proper Post object. */
         post = await DataStorage.getDataStorage().makePost(post);
 
+    /*  Send the user a response. We may not even need this much - TODO can we
+        get away with an EmptyResponse? */
         const response = await ResponseGen.SinglePostResponse(post);
         res.contentType("application/xml");
         res.send(response);
 
+    /*  Resolve account promise. We finally have to wait around for external
+        databases and things. Since we already responded to the user, it
+        shouldn't matter that much. */
         const account = await accountPromise;
+
+    /*  Fill in Post and submit to the database. */
         post.screenName = account.screenName;
         DataStorage.getDataStorage().submitPost(post);
         Log.debug(`${post.screenName}`);
@@ -113,8 +136,11 @@ class APIServer {
 
     //TODO this code is a mess
     decodeParamPack(paramPack) {
+    /*  Decode base64 */
         let dec = Buffer.from(paramPack, "base64").toString("ascii");
+    /*  Remove starting and ending '/', split into array */
         dec = dec.slice(1, -1).split("\\");
+    /*  Parameters are in the format [name, val, name, val]. Copy into out{}. */
         const out = {};
         for (let i = 0; i < dec.length; i += 2) {
             out[dec[i].trim()] = dec[i + 1].trim();
