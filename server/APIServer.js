@@ -92,13 +92,17 @@ class APIServer {
     /*  Extract post ID from URL (thanks Express!) */
         const postID = req.params[0];
 
-        const [ response ] = await Promise.all([
-            ResponseGen.EmptyResponse(),
-            DataStorage.getDataStorage().empathyPostByID(postID),
-        ]);
+    /*  Send post ID off to database. This will happen in the background */
+        const empathyPromise = DataStorage.getDataStorage().empathyPostByID(postID);
 
+    /*  Respond to the client; they only want <has_error>0</has_error> anyway,
+        so there's no need to wait around for the database */
+        const response = await ResponseGen.EmptyResponse();
         res.contentType("application/xml");
         res.send(response);
+
+    /*  Wait for the database to complete so we can catch any errors */
+        await empathyPromise;
     }
 
     async postRequest(req, res) {
