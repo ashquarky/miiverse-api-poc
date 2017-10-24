@@ -36,6 +36,8 @@ class APIServer {
         app.get(`/${consts.API_VERSION}/communities/*`, wrap(this.communityRequest.bind(this)));
         app.post(`/${consts.API_VERSION}/posts/*/empathies`, wrap(this.empathyRequest.bind(this)));
         app.post(`/${consts.API_VERSION}/posts`, mult.array(), wrap(this.postRequest.bind(this)));
+        app.get(`/${consts.API_VERSION}/topics`, wrap(this.topicRequest.bind(this)));
+        app.get(`/${consts.API_VERSION}/people`, wrap(this.peopleRequest.bind(this)));
         app.all("/", wrap(this.rootRequest.bind(this)));
     }
 
@@ -151,6 +153,19 @@ class APIServer {
         post.screenName = account.screenName;
         DataStorage.getDataStorage().submitPost(post);
         Log.debug(`${post.screenName}`);
+    }
+
+/*  Used during the generation of WaraWara Plaza.
+    501 for now; WaraWara can be for another day. */
+    async topicRequest(req, res) {
+        res.status(501);
+        res.send();
+    }
+
+/*  Used on the HOME menu? 501 for now; will implement later. */
+    async peopleRequest(req, res) {
+        res.status(501);
+        res.send();
     }
 
     //TODO this code is a mess
