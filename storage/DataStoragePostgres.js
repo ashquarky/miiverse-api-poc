@@ -25,8 +25,9 @@ const Log = require("../utils/Log.js");
 const consts = require("../utils/consts.js");
 const client = new Client();
 
-const qCommunityByTID = "SELECT cid, name, tids, empathy FROM communities " +
-                        "WHERE $1 = ANY(communities.tids) AND main = true";
+const qCommunityByTID = "SELECT cid, name, tids, empathy, appdata " +
+                        "FROM communities WHERE $1 = ANY(communities.tids) " +
+                        "AND main = true";
 const qCommunityByID = "SELECT cid, name, tids, empathy FROM communities " +
                        "WHERE $1 = cid AND main = true";
 const qPostsByCID = "SELECT id, created, painting, post, empathy, " +
@@ -95,6 +96,7 @@ class DataStoragePostgres {
             name: DBCommunity.name,
             empathy: DBCommunity.empathy,
             tids: DBCommunity.tids,
+            appData: DBCommunity.appdata,
         }
         return community;
     }
