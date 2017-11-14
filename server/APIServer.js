@@ -35,12 +35,18 @@ class APIServer {
 
     setupRequests() {
         app.all("*", wrap(this.request.bind(this)));
-        app.get(`/${consts.API_VERSION}/communities/*`, wrap(this.communityRequest.bind(this)));
-        app.post(`/${consts.API_VERSION}/posts/*/empathies`, wrap(this.empathyRequest.bind(this)));
-        app.post(`/${consts.API_VERSION}/posts`, mult.array(), wrap(this.postRequest.bind(this)));
-        app.get(`/${consts.API_VERSION}/topics`, wrap(this.topicRequest.bind(this)));
-        app.get(`/${consts.API_VERSION}/people`, wrap(this.peopleRequest.bind(this)));
-        app.all("/", wrap(this.rootRequest.bind(this)));
+        app.get(`/${consts.API_VERSION}/communities/*`,
+            wrap(this.communityRequest.bind(this)));
+        app.post(`/${consts.API_VERSION}/posts/*/empathies`,
+            wrap(this.empathyRequest.bind(this)));
+        app.post(`/${consts.API_VERSION}/posts`,
+            mult.array(), wrap(this.postRequest.bind(this)));
+        app.get(`/${consts.API_VERSION}/topics`,
+            wrap(this.topicRequest.bind(this)));
+        app.get(`/${consts.API_VERSION}/people`,
+            wrap(this.peopleRequest.bind(this)));
+        app.all("/",
+            wrap(this.rootRequest.bind(this)));
     }
 
     reqdie(res) {
@@ -86,9 +92,11 @@ class APIServer {
     /*  Get community details. communityID is usually 0, for some reason. */
         let community = null;
         if (communityID === 0) {
-            community = await DataStorage.getDataStorage().getCommunityByTitleID(paramPack.title_id);
+            community = await DataStorage.getDataStorage()
+                .getCommunityByTitleID(paramPack.title_id);
         } else {
-            community = await DataStorage.getDataStorage().getCommunityByID(communityID);
+            community = await DataStorage.getDataStorage()
+                .getCommunityByID(communityID);
         }
         if (!community) {
             this.reqdie(res);
@@ -96,8 +104,8 @@ class APIServer {
         }
 
     /*  Go to the database for posts. */
-        const posts = await DataStorage.getDataStorage().getPostsByCommunity(community, req.query.limit);
-
+        const posts = await DataStorage.getDataStorage()
+            .getPostsByCommunity(community, req.query.limit);
         if (!posts) {
             this.reqdie(res);
             return;
@@ -114,7 +122,8 @@ class APIServer {
         const postID = req.params[0];
 
     /*  Send post ID off to database. This will happen in the background */
-        const empathyPromise = DataStorage.getDataStorage().empathyPostByID(postID);
+        const empathyPromise = DataStorage.getDataStorage()
+            .empathyPostByID(postID);
 
     /*  Respond to the client; they only want <has_error>0</has_error> anyway,
         so there's no need to wait around for the database */
@@ -130,16 +139,19 @@ class APIServer {
     /*  Decode some parameters from the POST data and headers */
         const communityID = parseInt(req.body.community_id, 10);
         const paramPack = this.decodeParamPack(req.headers["x-nintendo-parampack"]);
+        const serviceToken = req.headers["x-nintendo-servicetoken"];
     /*  Send off tokens to the auth server. It's a promise, so this will happen
         asynchronously. */
-        const accountPromise = NNIDAuth.getAccountByToken(req.headers["x-nintendo-servicetoken"]);
+        const accountPromise = NNIDAuth.getAccountByToken(serviceToken);
 
     /*  Get community details. Generally, communityID will be 0. */
         let community = null;
         if (communityID === 0) {
-            community = await DataStorage.getDataStorage().getCommunityByTitleID(paramPack.title_id);
+            community = await DataStorage.getDataStorage()
+                .getCommunityByTitleID(paramPack.title_id);
         } else {
-            community = await DataStorage.getDataStorage().getCommunityByID(communityID);
+            community = await DataStorage.getDataStorage()
+                .getCommunityByID(communityID);
         }
 
     /*  Santize base64 strings. */
