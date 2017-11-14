@@ -18,7 +18,7 @@ const app = express();
 const mult = multer();
 
 class APIServer {
-    listen() {
+    async listen() {
         if (consts.USE_SSL) {
             https.createServer({
                 key: fs.readFileSync("certs/tmp-key.pem"),
@@ -27,6 +27,8 @@ class APIServer {
         } else {
             http.createServer(app).listen(consts.API_PORT);
         }
+
+        await DataStorage.getDataStorage().init();
 
         this.setupRequests();
     }
@@ -39,6 +41,16 @@ class APIServer {
         app.get(`/${consts.API_VERSION}/topics`, wrap(this.topicRequest.bind(this)));
         app.get(`/${consts.API_VERSION}/people`, wrap(this.peopleRequest.bind(this)));
         app.all("/", wrap(this.rootRequest.bind(this)));
+    }
+
+    reqdie(res) {
+        res.status(500);
+        res.send(
+            "Internal server error: Something went awfully wrong." +
+            "\n\n" +
+            "More details should be in the server logs. If you're an end " +
+            "user, contact the server operator."
+        );
     }
 
 /*  Log *ALL* requests. Probably should change this to a different loglevel. */
@@ -78,9 +90,18 @@ class APIServer {
         } else {
             community = await DataStorage.getDataStorage().getCommunityByID(communityID);
         }
+        if (!community) {
+            this.reqdie(res);
+            return;
+        }
 
     /*  Go to the database for posts. */
         const posts = await DataStorage.getDataStorage().getPostsByCommunity(community, req.query.limit);
+
+        if (!posts) {
+            this.reqdie(res);
+            return;
+        }
 
     /*  Build formatted response and send it off. */
         const response = await ResponseGen.PostsResponse(posts, community);

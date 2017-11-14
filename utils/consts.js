@@ -1,13 +1,14 @@
 if (typeof module !== "undefined") {
     exports.ENUM_STORAGETYPE = {
         DUMMY: 0,
+        POSTGRES: 1,
     };
 
     exports.VERSION = "0.0.1";
     exports.API_VERSION = "v1";
     exports.API_PORT = process.env.PORT || 5000;
     exports.USE_SSL = !(process.env.USE_SSL === 'false');
-    exports.STORAGETYPE = exports.ENUM_STORAGETYPE.DUMMY;
+    exports.STORAGETYPE = exports.ENUM_STORAGETYPE.POSTGRES;
 
     exports.BAD_POST_ID = "BAD_POST";
     exports.BAD_POST_PID = 0xDEADC0DE;

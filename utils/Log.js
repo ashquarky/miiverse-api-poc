@@ -20,7 +20,7 @@ class Log {
         console.warn(`${BRIGHT}${YELLOW}[WARN ]${RESET}`, msg, RESET);
     }
     static error(msg) {
-        console.err(`${BRIGHT}${RED}[ERROR]${RESET}${BRIGHT}`, msg, RESET);
+        console.warn(`${BRIGHT}${RED}[ERROR]${RESET}${BRIGHT}`, msg, RESET);
     }
 }
 
