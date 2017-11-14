@@ -7,7 +7,7 @@
     main bool, //False if the community is a sub-community of a game.
 
     ----TABLE: POSTS----
-    id int, //post id; automatic
+    id [anything], //post id, int or string, must be autoassigned by DB
     cid int, //community id
     created timestamp, //time of creation, GMT
 
@@ -27,11 +27,12 @@ const client = new Client();
 
 const qCommunityByTID = "SELECT cid, name, tids, empathy FROM communities " +
                         "WHERE $1 = ANY(communities.tids) AND main = true";
-const qCommunityByID =  "SELECT cid, name, tids, empathy FROM communities " +
-                        "WHERE $1 = cid AND main = true";
-const qPostsByCID =     "SELECT id, created, painting, post, empathy, " +
-                        "appdata FROM posts WHERE $1 = cid ORDER by created " +
-                        "LIMIT $2";
+const qCommunityByID = "SELECT cid, name, tids, empathy FROM communities " +
+                       "WHERE $1 = cid AND main = true";
+const qPostsByCID = "SELECT id, created, painting, post, empathy, " +
+                    "appdata FROM posts WHERE $1 = cid ORDER by created " +
+                    "LIMIT $2";
+const qEmpathyPostByID = "UPDATE posts SET empathy = empathy + 1 WHERE id = $1";
 
 const POSTS_MAX = 1000;
 
@@ -140,6 +141,18 @@ class DataStoragePostgres {
             Log.debug(posts[posts.length - 1]);
         }
         return posts;
+    }
+
+    static async empathyPostByID(id) {
+        let res = null;
+        try {
+            res = await client.query(qEmpathyPostByID, [ id ]);
+        } catch (err) {
+            Log.error("Database error in empathyPostByID!");
+            Log.error(err);
+            return null;
+        }
+        Log.debug(res);
     }
 
     static async init() {
