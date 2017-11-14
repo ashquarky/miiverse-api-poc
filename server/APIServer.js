@@ -144,7 +144,10 @@ class APIServer {
 
     /*  Santize base64 strings. */
         const appData = req.body.app_data.replace(/\0/g, "").trim();
-        const painting = req.body.painting.replace(/\0/g, "").trim();
+        let painting = "";
+        if (req.body.painting) {
+            painting = req.body.painting.replace(/\0/g, "").trim();
+        }
 
     /*  Build an IncomingPost object with all the information we've gathered.
         screenName will be fixed up once we check on the promise. */

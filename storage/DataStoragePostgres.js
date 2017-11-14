@@ -33,6 +33,9 @@ const qPostsByCID = "SELECT id, created, painting, post, empathy, " +
                     "appdata FROM posts WHERE $1 = cid ORDER by created " +
                     "LIMIT $2";
 const qEmpathyPostByID = "UPDATE posts SET empathy = empathy + 1 WHERE id = $1";
+const qSubmitPost = "INSERT INTO posts " +
+                    "(cid, created, painting, post, empathy, appdata) " +
+                    "VALUES ($1, $2, $3, $4, $5, $6)";
 
 const POSTS_MAX = 1000;
 
@@ -152,7 +155,35 @@ class DataStoragePostgres {
             Log.error(err);
             return null;
         }
-        Log.debug(res);
+    }
+
+/*  remind me why I specced this function? */
+    static async makePost(post) {
+        return new Post({
+            id: 0,
+            pid: 0,
+            tid: post.tid,
+            communityID: post.communityID,
+            created: post.created,
+
+            body: post.body,
+            painting: post.painting,
+            empathy: 0,
+            screenName: post.screenName,
+
+            appData: post.appData,
+        });
+    }
+
+    static async submitPost(post) {
+        await client.query(qSubmitPost, [
+            post.communityID,
+            post.created,
+            post.painting,
+            post.body,
+            post.empathy,
+            post.appData,
+        ]);
     }
 
     static async init() {
