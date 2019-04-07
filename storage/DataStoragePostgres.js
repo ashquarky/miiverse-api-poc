@@ -190,7 +190,10 @@ class DataStoragePostgres {
 
     static async init() {
         Log.info("Connecting to PostgreSQL...");
-        await client.connect().catch(function(reason) {
+        await client.connect({
+            connectionString: process.env.DATABASE_URL,
+            ssl: true,
+        }).catch(function(reason) {
             Log.error("Failed to connect to database!");
             Log.error(reason);
         });
