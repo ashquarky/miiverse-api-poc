@@ -23,7 +23,10 @@ const moment = require("moment-timezone");
 const Post = require("./Post.js");
 const Log = require("../utils/Log.js");
 const consts = require("../utils/consts.js");
-const client = new Client();
+const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
+});
 
 const qCommunityByTID = "SELECT cid, name, tids, empathy, appdata " +
                         "FROM communities WHERE $1 = ANY(communities.tids) " +
@@ -190,10 +193,7 @@ class DataStoragePostgres {
 
     static async init() {
         Log.info("Connecting to PostgreSQL...");
-        await client.connect({
-            connectionString: process.env.DATABASE_URL,
-            ssl: true,
-        }).catch(function(reason) {
+        await client.connect().catch(function(reason) {
             Log.error("Failed to connect to database!");
             Log.error(reason);
         });
